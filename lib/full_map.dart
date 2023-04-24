@@ -139,7 +139,6 @@ class FullMapState extends State<FullMap> {
           ),
         ),
         body: MapboxMap(
-
           styleString: MapboxStyles.SATELLITE_STREETS,
           //styleString: 'mapbox://styles/mapbox/satellite-streets-v12',
           //styleString: 'https://api.mapbox.com/styles/v1/b108/cldle77ji003v01rnd4tb1gst/?fresh=true&access_token=pk.eyJ1IjoiYjEwOCIsImEiOiJjaW9tanA2c2YwMDBtdzRtOWl6amltd3E2In0.B7r0hL7VrZRNtpip9417Bg',
