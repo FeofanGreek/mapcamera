@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -28,8 +29,42 @@ class FullMapState extends State<FullMap> {
   Timer? filterTimer;
   int filteredId = 0;
 
+  static LatLng center = LatLng(55.7733195,37.4972626);
+  double speed = 20;
+  double heading = 45;
+
+  bool mapReady = false;
+
+  @override
+  void initState(){
+    // Timer.periodic(Duration(milliseconds: 10), (v){
+    //   if(mapReady) {
+    //     var degreeLag = speed / 111134.861111;
+    //     var latitude = center.latitude +
+    //         degreeLag * cos(heading * 3.14 / 180.0);
+    //     var longitude = center.longitude +
+    //         degreeLag * sin(heading * 3.14 / 180.0) /
+    //             cos(center.latitude * 3.14 / 180.0);
+    //     center = LatLng(latitude, longitude);
+    //     //setState(() {
+    //     print(center);
+    //     //});
+    //     mapController?.moveCamera(CameraUpdate.newCameraPosition(
+    //       CameraPosition(
+    //         bearing: heading,
+    //         target: center,
+    //         tilt: 30.0,
+    //         zoom: 8.0,
+    //       ),
+    //     ),);
+    //   }
+    // });
+    super.initState();
+  }
+
   _onMapCreated(MapboxMapController controller) async{
     mapController = controller;
+
     await mapController?.addSource("experiment", GeojsonSourceProperties(data: _testZone));
     ///контур
     await controller.addLineLayer(
@@ -101,6 +136,7 @@ class FullMapState extends State<FullMap> {
     //   filteredId = filteredId == 0 ? 1 : 0;
     //   mapController?.setFilter('fills', ['==', 'id', filteredId]);
     // });
+    mapReady = true;
   }
 
   _onStyleLoadedCallback() async{
@@ -125,7 +161,7 @@ class FullMapState extends State<FullMap> {
                     bearing: 0.0,
                     zoom: 10,
                     tilt: 89.9,
-                    target: LatLng(55.7733195,37.4972626))));
+                    target: center)));
                 // mapController?.setFilter(layerId, filter);
                 //  mapController?.addFillLayer(
                 //      'mapbox-dem',
@@ -148,7 +184,18 @@ class FullMapState extends State<FullMap> {
           initialCameraPosition: const CameraPosition(
               target: LatLng(55.7733195,37.4972626)),
           onStyleLoadedCallback: _onStyleLoadedCallback,
-          myLocationEnabled: false,
+          myLocationEnabled: true,
+          trackCameraPosition: true,
+            onUserLocationUpdated: (location){
+              mapController?.moveCamera(CameraUpdate.newCameraPosition(
+                        CameraPosition(
+                          bearing: location.bearing!,
+                          target: location.position,
+                          tilt: 30.0,
+                          zoom: 14.0,
+                        ),
+                      ),);
+            }
         ));
   }
 }
