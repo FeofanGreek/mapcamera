@@ -31,6 +31,7 @@ class FullMapState extends State<FullMap> {
   _onMapCreated(MapboxMapController controller) async{
     mapController = controller;
     await mapController?.addSource("experiment", GeojsonSourceProperties(data: _testZone));
+    ///контур
     await controller.addLineLayer(
       "experiment",
       "lines",
@@ -39,25 +40,28 @@ class FullMapState extends State<FullMap> {
         lineWidth: 3,
       ),
     );
+    ///обводка
     await controller.addLineLayer(
       "experiment",
       "lines2",
       LineLayerProperties(
-          lineColor: Colors.purpleAccent.toHexStringRGB(),
+          lineColor: Colors.blue.toHexStringRGB(),
           lineWidth: 6,
           lineOffset: 5,
+          lineOpacity: 0.8
       ),
     );
+    ///заливка
     await mapController?.addFillLayer(
       "experiment",
       "experiment",
       FillLayerProperties(
 
-          fillOutlineColor: Colors.yellow.toHexStringRGB(),
-          fillColor: Colors.purple.toHexStringRGB(),
+          //fillOutlineColor: Colors.yellow.toHexStringRGB(),
+          fillColor: Colors.green.toHexStringRGB(),
           fillOpacity: 0.4),
       belowLayerId: "water",
-      //filter: ['==', 'id', 2],
+      filter: ['==', 'id', 2],
     );
 
     await mapController?.addSource("fills", GeojsonSourceProperties(data: _fills));
@@ -156,7 +160,7 @@ final _testZone = {
     {
       "type": "Feature",
       "id": 101,
-      "properties": <String, dynamic>{'id': 1},
+      "properties": <String, dynamic>{'id': 101},
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -180,7 +184,7 @@ final _testZone = {
     {
       "type": "Feature",
       "id": 101,
-      "properties": <String, dynamic>{'id': 1},
+      "properties": <String, dynamic>{'id': 101},
       "geometry": {
         "type": "Polygon",
         "coordinates": [ [
@@ -357,7 +361,7 @@ final _testZone = {
     {
       "type": "Feature",
       "id": 2,
-      "properties": <String, dynamic>{'id': 1},
+      "properties": <String, dynamic>{'id': 2},
       "geometry": {
         "type": "Polygon",
         "coordinates": [
